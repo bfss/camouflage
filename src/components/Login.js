@@ -1,6 +1,8 @@
 import React from 'react'
 import Box from '@mui/material/Box'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
+import Link from '@mui/material/Link'
+import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
@@ -45,6 +47,13 @@ function Login() {
           name='password'
           type='password'
         />
+        <Grid container justifyContent="flex-end">
+          <Grid item>
+            <Link href="/alipay" variant="body2">
+              查看收款码？点击这里
+            </Link>
+          </Grid>
+        </Grid>
         <Button
           type="submit"
           fullWidth
@@ -54,6 +63,14 @@ function Login() {
           登录
         </Button>
       </Box>
+      <Typography variant="body2" color="text.secondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="#">
+          柘榴
+        </Link>{' '}
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
     </Container>
 
   )
