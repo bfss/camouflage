@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useState } from 'react'
+import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Link from '@mui/material/Link'
@@ -7,19 +8,26 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import { Navigate, useNavigate } from 'react-router-dom'
+import axios from 'axios';
+import { server } from '../apis/APIUtils';
 
 function Login() {
 
   const navigate = useNavigate()
+  const [error, setError] = useState(false)
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget)
-    if (data.get("email") === "123@123.123" && data.get("password") === "123") {
-      // localStorage.setItem('key', "123");
-      sessionStorage.setItem("key", "123")
-      navigate("/")
-    }
+    await axios
+      .post(`${server}/login`, data)
+      .then((response) => {
+        localStorage.setItem('access_token', response.data.access_token);
+        navigate("/edit")
+      })
+      .catch((response) => {
+        setError(true)
+      })
   }
 
   return (
@@ -33,17 +41,22 @@ function Login() {
         component="form"
         onSubmit={handleSubmit}>
         <Typography variant='h4'>登录</Typography>
+        {error &&
+          <Alert severity="error" variant="outlined">检查你的用户名和密码</Alert>
+        }
         <TextField
           margin='normal'
           fullWidth
-          label='邮箱地址'
-          name='email'
-          type='email'
+          required
+          label='用户名'
+          name='username'
+          type='text'
         />
         <TextField
           margin='normal'
           fullWidth
-          label='登陆密码'
+          required
+          label='密码'
           name='password'
           type='password'
         />

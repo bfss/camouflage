@@ -1,34 +1,34 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Outlet, Navigate } from 'react-router-dom'
+import { server } from '../apis/APIUtils';
 
 function PrivateRoutes() {
 
     const [component, setComponent] = useState(null);
 
     useEffect(() => {
-        const key = sessionStorage.getItem("key");
-        if (key === "123") {
-            setComponent(<Outlet />)
-        } else {
-            setComponent(<Navigate to="/login"></Navigate>)
-        }
+        checkRole()
     }, [])
-    
-    /*
+
     const checkRole = async () => {
-        const key = sessionStorage.getItem("key");
+        const key = localStorage.getItem("access_token");
+        console.log(key)
+        const config = {
+            headers: {
+                "Authorization": key
+            }
+        }
         await axios
-            .get("url")
+            .get(`${server}/checkout`, config)
             .then(response => {
-                if (response.data.data === key) {
-                    setComponent(<Outlet />)
-                } else {
-                    setComponent(<Navigate to="/login"></Navigate>)
-                }
+                setComponent(<Outlet />)
+            })
+            .catch((response) => {
+                setComponent(<Navigate to="/login"></Navigate>)
             })
     }
-    */
+
 
     return component
 }
