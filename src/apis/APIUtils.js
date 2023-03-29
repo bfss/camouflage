@@ -1,1 +1,1 @@
-export const server = "http://192.168.8.123:8800"
+export const server = "https://www.beifangsusu.com/api"

@@ -60,13 +60,6 @@ function Login() {
           name='password'
           type='password'
         />
-        <Grid container justifyContent="flex-end">
-          <Grid item>
-            <Link href="/alipay" variant="body2">
-              查看收款码？点击这里
-            </Link>
-          </Grid>
-        </Grid>
         <Button
           type="submit"
           fullWidth
@@ -79,7 +72,7 @@ function Login() {
       <Typography variant="body2" color="text.secondary" align="center">
         {'Copyright © '}
         <Link color="inherit" href="#">
-          柘榴
+          北方素素
         </Link>{' '}
         {new Date().getFullYear()}
         {'.'}
