@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import axios from 'axios';
 import { server } from '../apis/APIUtils';
 import { Container, Divider } from '@mui/material';
 import { Stack } from '@mui/system';
+import "./Article.css"
 
 function Article() {
 
@@ -25,7 +27,7 @@ function Article() {
       <Stack spacing={2} mt={2}>
         <Typography variant='h2'>{article.title}</Typography>
         <Divider />
-        <div dangerouslySetInnerHTML={{ __html: article.content }} />
+        <Box className='article' dangerouslySetInnerHTML={{ __html: article.content }} />
       </Stack>
 
     </Container>
