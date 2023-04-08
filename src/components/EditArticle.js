@@ -51,7 +51,7 @@ function EditArticle() {
           onChange={handleTitle}
         />
         <Editor
-          tinymceScriptSrc={process.env.PUBLIC_URL + '/tinymce/tinymce.min.js'}
+          tinymceScriptSrc={process.env.PUBLIC_URL + 'custome/tinymce/tinymce.min.js'}
           initialValue=""
           init={{
             height: 500,
