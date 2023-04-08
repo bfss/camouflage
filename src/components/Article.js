@@ -15,17 +15,21 @@ function Article() {
   const [article, setArticle] = useState("");
 
   useEffect(() => {
-    axios
-      .get(`${server}/article/${id}`)
-      .then((response) => {
-        setArticle(response.data)
-      })
+    const fetchData = async () => {
+      await axios
+        .get(`${server}/article/${id}`)
+        .then((response) => {
+          setArticle(response.data)
+          window.Prism?.highlightAll()
+        })
+    }
+    fetchData()
   }, [])
 
   return (
     <Container>
       <Stack spacing={2} mt={2}>
-        <Typography variant='h2'>{article.title}</Typography>
+        <Typography variant='h4'>{article.title}</Typography>
         <Divider />
         <Box className='article' dangerouslySetInnerHTML={{ __html: article.content }} />
       </Stack>

@@ -1,14 +1,17 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 import { Button, Container } from '@mui/material';
 import { Stack } from '@mui/material';
 import { TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { server } from '../apis/APIUtils';
 
 function EditArticle() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
+
+  const navigate = useNavigate()
 
   const handleTitle = (event) => {
     setTitle(event.target.value)
@@ -31,7 +34,7 @@ function EditArticle() {
     await axios
       .post(`${server}/article`, form, config)
       .then((response) => {
-        console.log(response.status)
+        navigate(`/article/${response.data.id}`)
       })
   }
   
@@ -52,17 +55,31 @@ function EditArticle() {
           initialValue=""
           init={{
             height: 500,
+            // 禁用菜单栏
             menubar: false,
+            // 禁用右键菜单
+            contextmenu: false,
             plugins: [
               'advlist', 'autolink', 'lists', 'link', 'image', 'charmap',
-              'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+              'anchor', 'searchreplace', 'visualblocks', 'codesample', 'fullscreen',
               'insertdatetime', 'media', 'table', 'preview', 'wordcount'
             ],
             toolbar: 'undo redo | blocks | ' +
               'bold italic forecolor | alignleft aligncenter ' +
-              'alignright alignjustify | bullist numlist outdent indent | ',
+              'alignright alignjustify | bullist numlist outdent indent ' +
+              'codesample',
             content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
             language: 'zh-Hans',
+            codesample_global_prismjs: true,
+            codesample_languages: [
+              { text: 'Python', value: 'python' },
+              { text: 'HTML/XML', value: 'markup' },
+              { text: 'JavaScript', value: 'javascript' },
+              { text: 'CSS', value: 'css' },
+              { text: 'Java', value: 'java' },
+              { text: 'C#', value: 'csharp' },
+              { text: 'C++', value: 'cpp' }
+            ],
           }}
           onEditorChange={handleContent}
         />

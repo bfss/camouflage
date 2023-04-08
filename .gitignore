@@ -3,6 +3,9 @@
 # TinyMCE
 /public/tinymce
 
+# Prism
+/public/prism
+
 # dependencies
 /node_modules
 /.pnp

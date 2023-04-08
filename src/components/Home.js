@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
+import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { Divider, Stack } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { server } from '../apis/APIUtils';
 
 function Home() {
@@ -16,12 +18,14 @@ function Home() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios
-      .get(`${server}/article`)
-      .then((response) => {
-        console.log(response.data)
-        setArticles(response.data)
-      })
+    const fetchData = async () => {
+      await axios
+        .get(`${server}/article`)
+        .then((response) => {
+          setArticles(response.data)
+        })
+    }
+    fetchData()
   }, [])
 
   const handleClick = (id) => {
@@ -31,11 +35,18 @@ function Home() {
   return (
     <Container>
       <Stack spacing={2} mt={2}>
-        <Typography variant='h2'>文章目录</Typography>
+        <Typography variant='h4'>文章目录</Typography>
         <Divider />
-
         {articles.map(article =>
-          <a key={article.id} onClick={() => handleClick(article.id)}>{article.title}</a>
+          <Card key={article.id} sx={{ mt: 5 }}>
+            <CardHeader
+              title={article.title}
+              // subheader={Date.parse(article.timestamp)}
+            />
+            <CardActions>
+              <Button size="small" onClick={() => handleClick(article.id)}>阅读全文</Button>
+            </CardActions>
+          </Card>
         )}
       </Stack>
 
