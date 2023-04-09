@@ -20,11 +20,14 @@ function Article() {
         .get(`${server}/article/${id}`)
         .then((response) => {
           setArticle(response.data)
-          window.Prism?.highlightAll()
         })
     }
     fetchData()
   }, [])
+
+  useEffect(() => {
+    window.Prism?.highlightAll()
+  }, [article])
 
   return (
     <Container>
