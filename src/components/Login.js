@@ -7,14 +7,15 @@ import Grid from '@mui/material/Grid'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios';
 import { server } from '../apis/APIUtils';
 
 function Login() {
 
-  const navigate = useNavigate()
-  const [error, setError] = useState(false)
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [error, setError] = useState(false);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +24,7 @@ function Login() {
       .post(`${server}/login`, data)
       .then((response) => {
         localStorage.setItem('access_token', response.data.access_token);
-        navigate("/edit")
+        navigate(location.state.from)
       })
       .catch((response) => {
         setError(true)

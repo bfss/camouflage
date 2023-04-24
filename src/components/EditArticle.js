@@ -1,17 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 import { Button, Container } from '@mui/material';
 import { Stack } from '@mui/material';
 import { TextField } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { server } from '../apis/APIUtils';
 
 function EditArticle() {
+
+  const { id } = useParams();
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const navigate = useNavigate()
+  useEffect(() => {
+    const fetchData = async () => {
+      await axios
+        .get(`${server}/article/${id}`)
+        .then((response) => {
+          setTitle(response.data.title)
+          setContent(response.data.content)
+        })
+        .catch((response) => {
+          navigate("/*")
+        })
+    }
+    if (id !== undefined) {
+      fetchData()
+    }
+  }, [])
 
   const handleTitle = (event) => {
     setTitle(event.target.value)
@@ -22,22 +41,33 @@ function EditArticle() {
   }
 
   const handleSubmit = async () => {
-    const form = new FormData()
-    form.append("title", title)
-    form.append("content", content)
+    const data = {
+      "title": title,
+      "content": content
+    }
     const token = localStorage.getItem("access_token")
     const config = {
       headers: {
         'Authorization': token
       }
     }
-    await axios
-      .post(`${server}/article`, form, config)
-      .then((response) => {
-        navigate(`/article/${response.data.id}`)
-      })
+    if (id === undefined) {
+      await axios
+        .post(`${server}/article`, data, config)
+        .then((response) => {
+          navigate(`/article/${response.data.id}`)
+        })
+    }
+    else {
+      await axios
+        .patch(`${server}/article/${id}`, data, config)
+        .then((response) => {
+          navigate(`/article/${response.data.id}`)
+        })
+    }
+
   }
-  
+
   return (
     <Container>
       <Stack spacing={2}>
@@ -49,10 +79,11 @@ function EditArticle() {
           name='title'
           type='text'
           onChange={handleTitle}
+          value={title}
         />
         <Editor
-          tinymceScriptSrc={process.env.PUBLIC_URL + 'custome/tinymce/tinymce.min.js'}
-          initialValue=""
+          // tinymceScriptSrc={process.env.PUBLIC_URL + 'custome/tinymce/tinymce.min.js'}
+          value={content}
           init={{
             height: 500,
             // 禁用菜单栏
@@ -83,7 +114,7 @@ function EditArticle() {
           }}
           onEditorChange={handleContent}
         />
-        
+
         <Button onClick={handleSubmit}>提交</Button>
       </Stack>
     </Container>

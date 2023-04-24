@@ -1,9 +1,11 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Outlet, Navigate } from 'react-router-dom'
+import { Outlet, Navigate, useLocation } from 'react-router-dom'
 import { server } from '../apis/APIUtils';
 
 function PrivateRoutes() {
+
+    const location = useLocation();
 
     const [component, setComponent] = useState(null);
 
@@ -13,7 +15,6 @@ function PrivateRoutes() {
 
     const checkRole = async () => {
         const key = localStorage.getItem("access_token");
-        console.log(key)
         const config = {
             headers: {
                 "Authorization": key
@@ -25,7 +26,7 @@ function PrivateRoutes() {
                 setComponent(<Outlet />)
             })
             .catch((response) => {
-                setComponent(<Navigate to="/login"></Navigate>)
+                setComponent(<Navigate to="/login" state={{ from: location }}></Navigate>)
             })
     }
 
